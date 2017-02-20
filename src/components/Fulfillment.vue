@@ -56,13 +56,14 @@
       detail-row-component="detail-row"
       :append-params="moreParams"
       :load-on-start="false"
-      track-by="fields.order_no"
+      :track-by="fields.order_no"
       :per-page="perPage"
       loading-class="loading"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
       @vuetable:loading="onVuetableLoading"
       @vuetable:load-success="onVuetableloadSuccess"
+      @vuetable:load-error="onLoadError"
     ></vuetable>
 
     <div class="vuetable-pagination">
@@ -85,23 +86,24 @@ import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import Vue from 'vue'
-// import sweetAlert from 'sweetalert'
 import VueEvents from 'vue-events'
+import sweetAlert from 'sweetalert'
 import CustomActions from './CustomActions.vue'
 import DetailRow from './DetailRow.vue'
 import FilterBar from './FilterBar.vue'
 import Allocation from './Allocation.vue'
 
 Vue.use(VueEvents)
-Vue.component('custom-actions', CustomActions)
-Vue.component('detail-row', DetailRow)
-Vue.component('filter-bar', FilterBar)
 
-// let E_SERVER_ERROR = 'Error communicating with the server'
+// let API_URL = 'http://vanguard/api/fulfillment-order?status=3&access_token=DjL48nS0ZbMPLzmW8uKIb9d9XiVfIRu6QzqYrNcQ'
 let API_URL = 'http://admincentre.eservicesgroup.com:7890/api/fulfillment-order?status=3&access_token=iLhHtBRyZ4VcoIfKnp3q8quJ2cVnlmgiSwuKdrB9'
+
+Vue.component('custom-actions', CustomActions)
 
 export default {
   components: {
+    DetailRow,
+    FilterBar,
     Vuetable,
     VuetablePagination,
     VuetablePaginationInfo,
@@ -277,6 +279,10 @@ export default {
       this.showLoader()
     },
     onVuetableloadSuccess () {
+      this.hideLoader()
+    },
+    onLoadError () {
+      sweetAlert('Oops', 'Error communicating with the server', 'error')
       this.hideLoader()
     }
   },

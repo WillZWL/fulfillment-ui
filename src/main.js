@@ -9,6 +9,7 @@ window.$ = window.jQuery = require('jquery')
 
 import './../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './../node_modules/bootstrap/dist/js/bootstrap.min.js'
+import './../node_modules/sweetalert/dist/sweetalert.css'
 
 /* eslint-disable no-new */
 new Vue({
