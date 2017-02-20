@@ -1,5 +1,6 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
+    <allocation></allocation>
     <filter-bar></filter-bar>
     <div class="modal fade" id="settingsModal" role="dialog">
       <div class="modal-dialog">
@@ -89,6 +90,8 @@ import VueEvents from 'vue-events'
 import CustomActions from './CustomActions.vue'
 import DetailRow from './DetailRow.vue'
 import FilterBar from './FilterBar.vue'
+import Allocation from './Allocation.vue'
+
 Vue.use(VueEvents)
 Vue.component('custom-actions', CustomActions)
 Vue.component('detail-row', DetailRow)
@@ -101,7 +104,8 @@ export default {
   components: {
     Vuetable,
     VuetablePagination,
-    VuetablePaginationInfo
+    VuetablePaginationInfo,
+    Allocation
   },
   data () {
     return {
