@@ -45,7 +45,7 @@
     </div>
 
     <vuetable ref="vuetable"
-      api-url="http://vanguard/api/fulfillment-order?status=3"
+      :api-url="apiUrl"
       :fields="fields"
       data-path="newData"
       pagination-path="pagination"
@@ -95,6 +95,7 @@ Vue.component('detail-row', DetailRow)
 Vue.component('filter-bar', FilterBar)
 
 // let E_SERVER_ERROR = 'Error communicating with the server'
+let API_URL = 'http://admincentre.eservicesgroup.com:7890/api/fulfillment-order?status=3&access_token=iLhHtBRyZ4VcoIfKnp3q8quJ2cVnlmgiSwuKdrB9'
 
 export default {
   components: {
@@ -104,6 +105,7 @@ export default {
   },
   data () {
     return {
+      apiUrl: API_URL,
       fields: [
         {
           name: '__sequence',
