@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="vuetable-wrapper" :class="loading">
     <filter-bar></filter-bar>
     <div class="modal fade" id="settingsModal" role="dialog">
       <div class="modal-dialog">
@@ -12,26 +12,13 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" v-model="multiSort"> Multisort (use Alt+Click)
-                </label>
-              </div>
-            </div>
-            <div class="form-group">
-              <label>Pagination:</label>
-              <select class="form-control" v-model="paginationComponent">
-                <option value="vuetable-pagination">vuetable-pagination</option>
-                <option value="vuetable-pagination-dropdown">vuetable-pagination-dropdown</option>
-              </select>
-            </div>
-            <div class="form-group">
               <label>Per Page:</label>
               <select class="form-control" v-model="perPage">
-                <option value=10>10</option>
-                <option value=15>15</option>
-                <option value=20>20</option>
-                <option value=25>25</option>
+                <option value='10'>10</option>
+                <option value='50'>50</option>
+                <option value='100'>100</option>
+                <option value='200'>200</option>
+                <option value='500'>500</option>
               </select>
             </div>
             <div class="form-group">
@@ -65,14 +52,18 @@
       :css="css.table"
       :sort-order="sortOrder"
       :multi-sort="false"
-      detail-row-component="my-detail-row"
+      detail-row-component="detail-row"
       :append-params="moreParams"
-      :loading-class="loading"
       :load-on-start="false"
-      :detail-row-id="fields.order_no"
+      track-by="fields.order_no"
+      :per-page="perPage"
+      loading-class="loading"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
+      @vuetable:loading="onVuetableLoading"
+      @vuetable:load-success="onVuetableloadSuccess"
     ></vuetable>
+
     <div class="vuetable-pagination">
       <vuetable-pagination-info ref="paginationInfo"
         info-class="pagination-info"
@@ -93,14 +84,17 @@ import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import Vue from 'vue'
+// import sweetAlert from 'sweetalert'
 import VueEvents from 'vue-events'
 import CustomActions from './CustomActions.vue'
 import DetailRow from './DetailRow.vue'
 import FilterBar from './FilterBar.vue'
 Vue.use(VueEvents)
 Vue.component('custom-actions', CustomActions)
-Vue.component('my-detail-row', DetailRow)
+Vue.component('detail-row', DetailRow)
 Vue.component('filter-bar', FilterBar)
+
+// let E_SERVER_ERROR = 'Error communicating with the server'
 
 export default {
   components: {
@@ -138,8 +132,8 @@ export default {
           callback: 'formatDate|DD-MM-YYYY'
         },
         {
-          name: 'biz_type',
-          sortField: 'biz_type'
+          name: 'order_type',
+          sortField: 'order_type'
         },
         {
           name: 'delivery_info.name',
@@ -192,8 +186,10 @@ export default {
         }
       },
       sortOrder: [
-        {field: 'platform_id', sortField: 'platform_id', direction: 'asc'}
+        {field: 'order_no', sortField: 'order_no', direction: 'asc'}
       ],
+      perPage: 10,
+      loading: '',
       moreParams: {}
     }
   },
@@ -214,6 +210,32 @@ export default {
       transformed.newData = []
       transformed.newData = data.data
       return transformed
+    },
+    showLoader: function () {
+      this.loading = 'loading'
+    },
+    hideLoader: function () {
+      this.loading = ''
+    },
+    showDetailRow: function (value) {
+      let icon = this.$refs.vuetable.isVisibleDetailRow(value) ? 'down' : 'right'
+      return [
+        '<a class="show-detail-row">',
+        '<i class="chevron circle ' + icon + ' icon"></i>',
+        '</a>'
+      ].join('')
+    },
+    setFilter: function () {
+      this.moreParams = {
+        'filter': this.searchFor
+      }
+      this.$nextTick(function () {
+        this.$refs.vuetable.refresh()
+      })
+    },
+    resetFilter: function () {
+      this.searchFor = ''
+      this.setFilter()
     },
     allcap (value) {
       return value.toUpperCase()
@@ -244,6 +266,12 @@ export default {
       console.log('cellClicked: ', field.name)
       // console.log(newData)
       this.$refs.vuetable.toggleDetailRow(newData.order_no)
+    },
+    onVuetableLoading () {
+      this.showLoader()
+    },
+    onVuetableloadSuccess () {
+      this.hideLoader()
     }
   },
   events: {
@@ -270,6 +298,7 @@ export default {
   border-radius: 3px;
   padding: 5px 10px;
   margin-right: 2px;
+  cursor: pointer;
 }
 .pagination a.page.active {
   color: white;
@@ -295,5 +324,47 @@ export default {
 }
 .pagination-info {
   float: left;
+}
+
+/* Loading Animation: */
+.vuetable-wrapper {
+  opacity: 1;
+  position: relative;
+  filter: alpha(opacity=100); /* IE8 and earlier */
+}
+.vuetable-wrapper.loading {
+  opacity:0.4;
+   transition: opacity .3s ease-in-out;
+   -moz-transition: opacity .3s ease-in-out;
+   -webkit-transition: opacity .3s ease-in-out;
+}
+.vuetable-wrapper.loading:after {
+  position: absolute;
+  content: '';
+  top: 40%;
+  left: 50%;
+  margin: -30px 0 0 -30px;
+  border-radius: 100%;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  border: 4px solid #000;
+  height: 60px;
+  width: 60px;
+  background: transparent !important;
+  display: inline-block;
+  -webkit-animation: pulse 1s 0s ease-in-out infinite;
+  animation: pulse 1s 0s ease-in-out infinite;
+}
+@keyframes pulse {
+  0% {
+    -webkit-transform: scale(0.6);
+            transform: scale(0.6); }
+  50% {
+    -webkit-transform: scale(1);
+            transform: scale(1);
+         border-width: 12px; }
+  100% {
+    -webkit-transform: scale(0.6);
+            transform: scale(0.6); }
 }
 </style>
