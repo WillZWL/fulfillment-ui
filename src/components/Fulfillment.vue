@@ -60,12 +60,16 @@
     <vuetable ref="vuetable"
       api-url="http://vanguard/api/fulfillment-order?status=3"
       :fields="fields"
-      pagination-path=""
+      data-path="newData"
+      pagination-path="pagination"
       :css="css.table"
       :sort-order="sortOrder"
-      :multi-sort="true"
+      :multi-sort="false"
       detail-row-component="my-detail-row"
       :append-params="moreParams"
+      :loading-class="loading"
+      :load-on-start="false"
+      :detail-row-id="fields.order_no"
       @vuetable:cell-clicked="onCellClicked"
       @vuetable:pagination-data="onPaginationData"
     ></vuetable>
@@ -155,6 +159,12 @@ export default {
           callback: 'formatNumber'
         },
         {
+          name: 'items',
+          titleClass: 'text-center',
+          dataClass: 'text-left',
+          callback: 'formatItems'
+        },
+        {
           name: '__component:custom-actions',
           title: 'Actions',
           titleClass: 'text-center',
@@ -188,13 +198,32 @@ export default {
     }
   },
   methods: {
+    transform: function (data) {
+      var transformed = {}
+      var prevPageUrl
+      transformed.pagination = {
+        total: data.meta.pagination.total,
+        per_page: data.meta.pagination.per_page,
+        current_page: data.meta.pagination.current_page,
+        last_page: data.meta.pagination.total_pages,
+        next_page_url: data.meta.pagination.links.next,
+        prev_page_url: prevPageUrl,
+        from: (1 + (data.meta.pagination.current_page - 1) * (data.meta.pagination.per_page)),
+        to: data.meta.pagination.current_page * data.meta.pagination.per_page
+      }
+      transformed.newData = []
+      transformed.newData = data.data
+      return transformed
+    },
     allcap (value) {
       return value.toUpperCase()
     },
-    genderLabel (value) {
-      return value === 'M'
-        ? '<span class="label label-success"><i class="glyphicon glyphicon-star"></i> Male</span>'
-        : '<span class="label label-danger"><i class="glyphicon glyphicon-heart"></i> Female</span>'
+    formatItems (value) {
+      var newValue = ''
+      for (var i = 0; i < value.length; i++) {
+        newValue += 'SKU :' + value[i].sku + '&nbsp;&nbsp;&nbsp;&nbsp;Qty: ' + value[i].quantity + '<br />'
+      }
+      return newValue
     },
     formatNumber (value) {
       return accounting.formatNumber(value, 2)
@@ -211,10 +240,10 @@ export default {
     onChangePage (page) {
       this.$refs.vuetable.changePage(page)
     },
-    onCellClicked (data, field, event) {
+    onCellClicked (newData, field, event) {
       console.log('cellClicked: ', field.name)
-      console.log(data)
-      this.$refs.vuetable.toggleDetailRow(data.id)
+      // console.log(newData)
+      this.$refs.vuetable.toggleDetailRow(newData.order_no)
     }
   },
   events: {
