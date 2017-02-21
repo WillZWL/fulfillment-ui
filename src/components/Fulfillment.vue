@@ -196,7 +196,7 @@ export default {
       sortOrder: [
         {field: 'order_no', sortField: 'order_no', direction: 'asc'}
       ],
-      perPage: 10,
+      perPage: 100,
       loading: '',
       moreParams: {}
     }
