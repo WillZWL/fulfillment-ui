@@ -1,12 +1,16 @@
 # order-fulfillment-system
 
-> ESG New Order Fulfillment System
+> ESG New Order Fulfillment UI
 
 ## Build Setup
 
 ``` bash
+# clone code && cd dir
+git clone http://gitlab.eservicesgroup.com/Will/fulfillment-ui.git
+cd fulfillment-ui
+
 # install dependencies
-npm install
+npm install OR yarn install (be sure you have install yarn)
 
 # serve with hot reload at localhost:8080
 npm run dev
