@@ -44,7 +44,6 @@
         </div>
       </div>
     </div>
-
     <vuetable ref="vuetable"
       :api-url="apiUrl"
       :fields="fields"
@@ -137,7 +136,12 @@ export default {
           sortField: 'order_create_date',
           titleClass: 'text-center',
           dataClass: 'text-center',
-          callback: 'formatDate|DD-MM-YYYY'
+          callback: 'formatDate|YYYY-MM-DD'
+        },
+        {
+          name: 'recommend_courier_id',
+          titleClass: 'text-center',
+          dataClass: 'text-center'
         },
         {
           name: 'order_type',
@@ -258,7 +262,7 @@ export default {
     formatNumber (value) {
       return accounting.formatNumber(value, 2)
     },
-    formatDate (value, fmt = 'D MMM YYYY') {
+    formatDate (value, fmt = 'DD MMM YYYY') {
       return (value == null)
         ? ''
         : moment(value, 'YYYY-MM-DD').format(fmt)
