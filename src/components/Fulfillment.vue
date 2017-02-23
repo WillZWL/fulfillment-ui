@@ -125,11 +125,16 @@ export default {
         },
         {
           name: 'order_no',
+          title: 'So No',
           sortField: 'order_no'
         },
         {
-          name: 'platform_id',
-          sortField: 'platform_id'
+          name: 'marketplace_platform_id',
+          title: 'platform_id'
+        },
+        {
+          name: 'sub_merchant_id',
+          title: 'Merchant'
         },
         {
           name: 'order_create_date',
@@ -140,6 +145,7 @@ export default {
         },
         {
           name: 'recommend_courier_id',
+          title: 'courier_id',
           titleClass: 'text-center',
           dataClass: 'text-center'
         },
@@ -148,8 +154,8 @@ export default {
           sortField: 'order_type'
         },
         {
-          name: 'delivery_info.name',
-          sortField: 'delivery_info.name',
+          name: 'country',
+          title: 'Country',
           titleClass: 'text-center',
           dataClass: 'text-center'
         },
