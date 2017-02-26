@@ -104,8 +104,7 @@ import Allocation from './Allocation.vue'
 
 Vue.use(VueEvents)
 
-// let API_URL = 'http://vanguard/api/fulfillment-order?status=3&access_token=DjL48nS0ZbMPLzmW8uKIb9d9XiVfIRu6QzqYrNcQ'
-let API_URL = 'http://admincentre.eservicesgroup.com:7890/api/fulfillment-order?access_token=iLhHtBRyZ4VcoIfKnp3q8quJ2cVnlmgiSwuKdrB9&status='
+let API_URL = process.env.API_URL
 
 Vue.component('custom-actions', CustomActions)
 
