@@ -5,7 +5,7 @@
 </template>
 <style>
 #app {
-  margin: 20px;
+  margin: 10px;
 }
 </style>
 <script>

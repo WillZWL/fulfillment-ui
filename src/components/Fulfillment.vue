@@ -1,6 +1,5 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
-    <allocation></allocation>
     <filter-bar></filter-bar>
     <div class="modal fade" id="settingsModal" role="dialog">
       <div class="modal-dialog">
@@ -44,37 +43,48 @@
         </div>
       </div>
     </div>
-    <vuetable ref="vuetable"
-      :api-url="apiUrl"
-      :fields="fields"
-      data-path="newData"
-      pagination-path="pagination"
-      :css="css.table"
-      :sort-order="sortOrder"
-      :multi-sort="false"
-      detail-row-component="detail-row"
-      :append-params="moreParams"
-      :load-on-start="false"
-      :track-by="fields.order_no"
-      :per-page="perPage"
-      loading-class="loading"
-      @vuetable:cell-clicked="onCellClicked"
-      @vuetable:pagination-data="onPaginationData"
-      @vuetable:loading="onVuetableLoading"
-      @vuetable:load-success="onVuetableloadSuccess"
-      @vuetable:load-error="onLoadError"
-    ></vuetable>
-
-    <div class="vuetable-pagination">
-      <vuetable-pagination-info ref="paginationInfo"
-        info-class="pagination-info"
-      ></vuetable-pagination-info>
-      <vuetable-pagination ref="pagination"
-        :css="css.pagination"
-        :icons="css.icons"
-        @vuetable-pagination:change-page="onChangePage"
-      ></vuetable-pagination>
+    <div>
+      <ul class="nav nav-pills" role="tablist">
+        <li role="presentation"><a class="btn btn-info" href="#" @click='changeStatus(3)'>Paied</a></li>
+        <li role="presentation"><a class="btn btn-warning" href="#" @click='changeStatus(5)'>Allocated</a></li>
+      </ul>
     </div>
+    <div class="panel panel-default">
+      <div class="panel-heading"><b>{{ statusText }}</b>  Order List</div>
+      <div class="panel-body">
+        <vuetable ref="vuetable"
+          :api-url="apiUrl+status"
+          :fields="fields"
+          data-path="newData"
+          pagination-path="pagination"
+          :css="css.table"
+          :sort-order="sortOrder"
+          :multi-sort="false"
+          detail-row-component="detail-row"
+          :append-params="moreParams"
+          :load-on-start="false"
+          :track-by="fields.order_no"
+          :per-page="perPage"
+          loading-class="loading"
+          @vuetable:cell-clicked="onCellClicked"
+          @vuetable:pagination-data="onPaginationData"
+          @vuetable:loading="onVuetableLoading"
+          @vuetable:load-success="onVuetableloadSuccess"
+          @vuetable:load-error="onLoadError"
+        ></vuetable>
+        <div class="vuetable-pagination">
+          <vuetable-pagination-info ref="paginationInfo"
+            info-class="pagination-info"
+          ></vuetable-pagination-info>
+          <vuetable-pagination ref="pagination"
+            :css="css.pagination"
+            :icons="css.icons"
+            @vuetable-pagination:change-page="onChangePage"
+          ></vuetable-pagination>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -95,7 +105,7 @@ import Allocation from './Allocation.vue'
 Vue.use(VueEvents)
 
 // let API_URL = 'http://vanguard/api/fulfillment-order?status=3&access_token=DjL48nS0ZbMPLzmW8uKIb9d9XiVfIRu6QzqYrNcQ'
-let API_URL = 'http://admincentre.eservicesgroup.com:7890/api/fulfillment-order?status=3&access_token=iLhHtBRyZ4VcoIfKnp3q8quJ2cVnlmgiSwuKdrB9'
+let API_URL = 'http://admincentre.eservicesgroup.com:7890/api/fulfillment-order?access_token=iLhHtBRyZ4VcoIfKnp3q8quJ2cVnlmgiSwuKdrB9&status='
 
 Vue.component('custom-actions', CustomActions)
 
@@ -175,12 +185,12 @@ export default {
           titleClass: 'text-center',
           dataClass: 'text-left',
           callback: 'formatItems'
-        },
-        {
-          name: '__component:custom-actions',
-          title: 'Actions',
-          titleClass: 'text-center',
-          dataClass: 'text-center'
+        // },
+        // {
+        //   name: '__component:custom-actions',
+        //   title: 'Actions',
+        //   titleClass: 'text-center',
+        //   dataClass: 'text-center'
         }
       ],
       css: {
@@ -208,6 +218,8 @@ export default {
       ],
       perPage: 100,
       loading: '',
+      status: 3,
+      statusText: 'Paied',
       moreParams: {}
     }
   },
@@ -282,7 +294,6 @@ export default {
     },
     onCellClicked (newData, field, event) {
       console.log('cellClicked: ', field.name)
-      // console.log(newData)
       this.$refs.vuetable.toggleDetailRow(newData.order_no)
     },
     onVuetableLoading () {
@@ -294,6 +305,17 @@ export default {
     onLoadError () {
       sweetAlert('Oops', 'Error communicating with the server', 'error')
       this.hideLoader()
+    },
+    changeStatus (status) {
+      if (status === 5) {
+        this.statusText = 'Allocated'
+      } else {
+        this.statusText = 'Paied'
+      }
+      this.status = status
+      this.$nextTick(function () {
+        this.$refs.vuetable.refresh()
+      })
     }
   },
   events: {
@@ -388,5 +410,8 @@ export default {
   100% {
     -webkit-transform: scale(0.6);
             transform: scale(0.6); }
+}
+.panel-default {
+  margin-top: 10px;
 }
 </style>
