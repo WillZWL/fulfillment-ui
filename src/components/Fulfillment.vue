@@ -64,7 +64,7 @@
           :append-params="moreParams"
           :load-on-start="false"
           :track-by="fields.order_no"
-          :per-page="perPage"
+          :per-page="Number(perPage)"
           loading-class="loading"
           @vuetable:cell-clicked="onCellClicked"
           @vuetable:pagination-data="onPaginationData"
