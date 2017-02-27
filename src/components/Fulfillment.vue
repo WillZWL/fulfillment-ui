@@ -62,8 +62,6 @@
 </template>
 
 <script>
-import accounting from 'accounting'
-import moment from 'moment'
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
@@ -73,8 +71,6 @@ import FilterBar from './FilterBar.vue'
 import Settings from './Settings.vue'
 
 let API_URL = process.env.API_URL
-
-// Vue.component('custom-actions', CustomActions)
 
 export default {
   components: {
@@ -117,8 +113,7 @@ export default {
           title: 'create_date',
           sortField: 'order_create_date',
           titleClass: 'text-center',
-          dataClass: 'text-center',
-          callback: 'formatDate|YYYY-MM-DD'
+          dataClass: 'text-center'
         },
         {
           name: 'courier_name',
@@ -144,8 +139,7 @@ export default {
           name: 'amount',
           sortField: 'amount',
           titleClass: 'text-center',
-          dataClass: 'text-right',
-          callback: 'formatNumber'
+          dataClass: 'text-right'
         },
         {
           name: 'items',
@@ -235,23 +229,12 @@ export default {
       this.searchFor = ''
       this.setFilter()
     },
-    allcap (value) {
-      return value.toUpperCase()
-    },
     formatItems (value) {
       var newValue = ''
       for (var i = 0; i < value.length; i++) {
         newValue += 'SKU :' + value[i].sku + '&nbsp;&nbsp;&nbsp;&nbsp;Qty: ' + value[i].quantity + '<br />'
       }
       return newValue
-    },
-    formatNumber (value) {
-      return accounting.formatNumber(value, 2)
-    },
-    formatDate (value, fmt = 'DD MMM YYYY') {
-      return (value == null)
-        ? ''
-        : moment(value, 'YYYY-MM-DD').format(fmt)
     },
     onPaginationData (paginationData) {
       this.$refs.pagination.setPaginationData(paginationData)
