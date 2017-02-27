@@ -95,14 +95,11 @@ import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import Vue from 'vue'
-import VueEvents from 'vue-events'
 import sweetAlert from 'sweetalert'
 import CustomActions from './CustomActions.vue'
 import DetailRow from './DetailRow.vue'
 import FilterBar from './FilterBar.vue'
 import Allocation from './Allocation.vue'
-
-Vue.use(VueEvents)
 
 let API_URL = process.env.API_URL
 
@@ -127,11 +124,11 @@ export default {
           titleClass: 'text-right',
           dataClass: 'text-right'
         },
-        {
-          name: '__checkbox',
-          titleClass: 'text-center',
-          dataClass: 'text-center'
-        },
+        // {
+        //   name: '__checkbox',
+        //   titleClass: 'text-center',
+        //   dataClass: 'text-center'
+        // },
         {
           name: 'order_no',
           title: 'So No',
@@ -147,14 +144,15 @@ export default {
         },
         {
           name: 'order_create_date',
+          title: 'create_date',
           sortField: 'order_create_date',
           titleClass: 'text-center',
           dataClass: 'text-center',
           callback: 'formatDate|YYYY-MM-DD'
         },
         {
-          name: 'recommend_courier_id',
-          title: 'courier_id',
+          name: 'courier_name',
+          title: 'courier_name',
           titleClass: 'text-center',
           dataClass: 'text-center'
         },
@@ -305,13 +303,18 @@ export default {
       sweetAlert('Oops', 'Error communicating with the server', 'error')
       this.hideLoader()
     },
-    changeStatus (status) {
+    changeStatus (status = 3, feedStatus = '') {
       if (status === 5) {
         this.statusText = 'Allocated'
       } else {
         this.statusText = 'Paied'
       }
       this.status = status
+      if (feedStatus !== '') {
+        this.moreParams.dnote_invoice_status = feedStatus
+      } else {
+        delete this.moreParams.dnote_invoice_status
+      }
       this.$nextTick(function () {
         this.$refs.vuetable.refresh()
       })
@@ -319,9 +322,7 @@ export default {
   },
   events: {
     'filter-set' (filterText) {
-      this.moreParams = {
-        filter: filterText
-      }
+      this.moreParams.filter = filterText
       Vue.nextTick(() => this.$refs.vuetable.refresh())
     },
     'filter-reset' () {
@@ -332,6 +333,12 @@ export default {
 }
 </script>
 <style>
+.vuetable-th-courier_name {
+  width: 80px;
+}
+.vuetable-th-sub_merchant_id {
+  width: 100px;
+}
 .pagination {
   margin: 0;
   float: right;
