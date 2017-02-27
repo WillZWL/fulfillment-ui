@@ -1,48 +1,7 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
     <filter-bar></filter-bar>
-    <div class="modal fade" id="settingsModal" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-              <span>&times;</span>
-            </button>
-            <h4 class="modal-title">Settings</h4>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label>Per Page:</label>
-              <select class="form-control" v-model="perPage">
-                <option value='10'>10</option>
-                <option value='50'>50</option>
-                <option value='100'>100</option>
-                <option value='200'>200</option>
-                <option value='500'>500</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">Visible fields</h4>
-                </div>
-                <div class="panel-body">
-                  <div class="checkbox" v-for="field in fields">
-                    <label>
-                      <input type="checkbox" v-model="field.visible">
-                      {{ field.title == '' ? field.name.replace('__', '') : field.title}}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+    <settings :fields="fields"></settings>
     <div>
       <ul class="nav nav-pills" role="tablist">
         <li role="presentation">
@@ -110,23 +69,20 @@ import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import Vue from 'vue'
 import sweetAlert from 'sweetalert'
-import CustomActions from './CustomActions.vue'
-import DetailRow from './DetailRow.vue'
 import FilterBar from './FilterBar.vue'
-import Allocation from './Allocation.vue'
+import Settings from './Settings.vue'
 
 let API_URL = process.env.API_URL
 
-Vue.component('custom-actions', CustomActions)
+// Vue.component('custom-actions', CustomActions)
 
 export default {
   components: {
-    DetailRow,
     FilterBar,
     Vuetable,
     VuetablePagination,
     VuetablePaginationInfo,
-    Allocation
+    Settings
   },
   data () {
     return {
@@ -351,6 +307,9 @@ export default {
     },
     'hide-loading' () {
       this.loading = ''
+    },
+    'per-page-set' (num) {
+      this.perPage = num
     }
   }
 }
