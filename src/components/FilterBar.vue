@@ -6,7 +6,7 @@
           <label>Merchant :</label>
           <select class="form-control select2" style="width:150px" v-model="merchantId">
             <option value=""></option>
-            <option v-for="merchant in merchants" :value="merchant.merchant_short_id">{{merchant.merchant_id}}</option>
+            <option v-for="merchant in merchants" :value="merchant.merchant_id">{{merchant.merchant_id}}</option>
           </select>&nbsp;&nbsp;
           <label>Courier :</label>
           <select class="form-control select2" style="width:150px" v-model="courierId">
@@ -66,6 +66,9 @@ export default {
           this.merchants = response.data.data
           this.$events.fire('hide-loading')
         })
+        .catch(function () {
+          this.$events.fire('load-error')
+        })
     },
     getCouriersList () {
       this.$events.fire('show-loding')
@@ -73,6 +76,9 @@ export default {
         .then(function (response) {
           this.couriers = response.data.data
           this.$events.fire('hide-loading')
+        })
+        .catch(function () {
+          this.$events.fire('load-error')
         })
     }
   }

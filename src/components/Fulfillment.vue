@@ -310,6 +310,10 @@ export default {
     },
     'per-page-set' (num) {
       this.perPage = num
+    },
+    'load-error' () {
+      Vue.nextTick(() => this.onLoadError())
+      this.onLoadError()
     }
   }
 }
