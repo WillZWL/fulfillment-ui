@@ -45,15 +45,29 @@
     </div>
     <div>
       <ul class="nav nav-pills" role="tablist">
-        <li role="presentation"><a class="btn btn-info" href="#" @click='changeStatus(3)'>Paied</a></li>
-        <li role="presentation"><a class="btn btn-warning" href="#" @click='changeStatus(5)'>Allocated</a></li>
+        <li role="presentation">
+          <button type="button" class="btn btn-info" @click='changeStatus(3)'>Paied</button>
+        </li>
+        <li role="presentation">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Allocated
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" @click="changeStatus(5, '')">All</li>
+              <li><a href="#" @click='changeStatus(5, 2)'>Feed Generated</a></li>
+              <li><a href="#" @click='changeStatus(5, 0)'>Not Generated</a></li>
+            </ul>
+          </div>
+        </li>
       </ul>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading"><b>{{ statusText }}</b>  Order List</div>
       <div class="panel-body">
         <vuetable ref="vuetable"
-          :api-url="apiUrl+status"
+          :api-url="apiUrl+'fulfillment-order'"
           :fields="fields"
           data-path="newData"
           pagination-path="pagination"
@@ -215,9 +229,10 @@ export default {
       ],
       perPage: 100,
       loading: '',
-      status: 3,
       statusText: 'Paied',
-      moreParams: {}
+      moreParams: {
+        status: 3
+      }
     }
   },
   methods: {
@@ -309,7 +324,7 @@ export default {
       } else {
         this.statusText = 'Paied'
       }
-      this.status = status
+      this.moreParams.status = status
       if (feedStatus !== '') {
         this.moreParams.dnote_invoice_status = feedStatus
       } else {
@@ -321,13 +336,21 @@ export default {
     }
   },
   events: {
-    'filter-set' (filterText) {
-      this.moreParams.filter = filterText
+    'filter-set' (params) {
+      var status = this.moreParams.status
+      this.moreParams = params
+      this.moreParams.status = status
       Vue.nextTick(() => this.$refs.vuetable.refresh())
     },
     'filter-reset' () {
       this.moreParams = {}
       Vue.nextTick(() => this.$refs.vuetable.refresh())
+    },
+    'show-loding' () {
+      this.loading = 'loading'
+    },
+    'hide-loading' () {
+      this.loading = ''
     }
   }
 }
