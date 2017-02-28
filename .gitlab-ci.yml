@@ -1,0 +1,37 @@
+# cache
+cache:
+  paths:
+    - node_modules/
+
+# Before Script
+before_script:
+  - echo 'Building Start....'
+
+# Stages
+stages:
+ - install_modules
+ - build
+ - deploy_production
+
+# Install node_modules
+install_modules:
+  stage: install_modules
+  script:
+    - echo 'npm install start....'
+    - npm install
+    - echo 'npm install end...'
+
+# npm run build
+build:
+  stage: build
+  script:
+    - echo 'Building...'
+    - npm run build
+    - echo 'Build End'
+
+# Deploy Production
+deploy_production:
+  stage: deploy_production
+  script:
+    - echo 'Deploying'
+
