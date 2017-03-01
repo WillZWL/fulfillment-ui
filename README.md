@@ -53,4 +53,24 @@ npm run e2e
 npm test
 ```
 
+## NOTICE
+When you need to put the builded code on Live, Follow those steps
+# 1st Step
+remove all builded file on `shop.eservicesgroup.com/admincentre/fulfillment`
+```
+rm -rf shop.eservicesgroup.com/admincentre/fulfillment
+```
+
+# 2nd
+copy the builded folder `dist/fulfillment` to `shop.eservicesgroup.com/admincentre/fulfillment`
+```
+cp -R dist/fulfillment/ ../project/shop.eservicesgroup.com/admincentre/fulfillment/
+```
+
+# 3rd
+copy the entry file `dist/index.html` to `shop.eservicesgroup.com/app/views/order_fulfillment.php`
+```
+cp dist/index.html ../project/shop.eservicesgroup.com/app/views/order_fulfillment.php
+```
+
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
