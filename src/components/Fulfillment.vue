@@ -1,6 +1,6 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
-    <filter-bar></filter-bar>
+    <filter-bar :status="moreParams.status"></filter-bar>
     <settings :fields="fields"></settings>
     <div>
       <ul class="nav nav-pills" role="tablist">
