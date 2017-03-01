@@ -36,7 +36,7 @@
           detail-row-component="detail-row"
           :append-params="moreParams"
           :load-on-start="false"
-          :track-by="fields.order_no"
+          :track-by="'order_no'"
           :per-page="Number(perPage)"
           loading-class="loading"
           @vuetable:cell-clicked="onCellClicked"

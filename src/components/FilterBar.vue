@@ -4,16 +4,10 @@
       <form class="form-inline">
         <div class="form-group">
           <label>Merchant :</label>
-          <select class="form-control select2" style="width:150px" v-model="merchantId">
-            <option value=""></option>
-            <option v-for="merchant in merchants" :value="merchant.merchant_id">{{merchant.merchant_id}}</option>
-          </select>&nbsp;&nbsp;
+          <vue-select multiple v-model="selectedMerchants" label="merchant_id" :options="merchants"></vue-select>
           <label>Courier :</label>
-          <select class="form-control select2" style="width:150px" v-model="courierId">
-            <option value=""></option>
-            <option v-for="courier in couriers" :value="courier.courier_id">{{courier.courier_name}}</option>
-          </select>&nbsp;&nbsp;
-          <label> Search for :</label>
+          <vue-select multiple v-model="selectedCouriers" label="courier_name" :options="couriers"></vue-select>
+          <label> Search for :</label><br/>
           <input type="text" v-model="filterText" class="form-control" @keyup.enter="doFilter" placeholder="so no, platform_id">
           <button class="btn btn-primary" @click.prevent="doFilter">Search</button>
           <button class="btn" @click.prevent="resetFilter">Reset</button>
@@ -32,15 +26,19 @@
 
 <script>
 let API_URL = process.env.API_URL
+import VueSelect from 'vue-select'
 export default {
+  components: {
+    VueSelect
+  },
   data () {
     return {
       apiUrl: API_URL,
       filterText: '',
-      merchantId: '',
-      courierId: '',
-      merchants: {},
-      couriers: {},
+      selectedMerchants: [],
+      selectedCouriers: [],
+      merchants: [],
+      couriers: [],
       params: {}
     }
   },
@@ -48,10 +46,26 @@ export default {
     this.getMerchantList()
     this.getCouriersList()
   },
+  computed: {
+    selectedMerchantIds () {
+      var result = []
+      for (var i in this.selectedMerchants) {
+        result.push(this.selectedMerchants[i].merchant_id)
+      }
+      return result
+    },
+    selectedCourierIds () {
+      var result = []
+      for (var i in this.selectedCouriers) {
+        result.push(this.selectedCouriers[i].courier_id)
+      }
+      return result
+    }
+  },
   methods: {
     doFilter () {
-      this.params.merchantId = this.merchantId
-      this.params.courierId = this.courierId
+      this.params.merchantId = this.selectedMerchantIds
+      this.params.courierId = this.selectedCourierIds
       this.params.filterText = this.filterText
       this.$events.fire('filter-set', this.params)
     },
