@@ -76,7 +76,7 @@ export default {
     doFilter () {
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
-      this.params.filterText = this.filterText
+      this.params.filter = this.filterText
       this.$events.fire('filter-set', this.params)
     },
     resetFilter () {
@@ -87,7 +87,7 @@ export default {
       this.params.status = this.status
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
-      this.params.filterText = this.filterText
+      this.params.filter = this.filterText
       this.params.export = 1
       this.params.access_token = ACCESS_TOKEN
       var downloadUrl = API_URL + 'fulfillment-order?' + $.param(this.params)

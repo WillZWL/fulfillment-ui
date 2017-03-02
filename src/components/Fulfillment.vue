@@ -39,7 +39,7 @@
           :track-by="'order_no'"
           :per-page="Number(perPage)"
           loading-class="loading"
-          @vuetable:cell-clicked="onCellClicked"
+          @vuetable:cell-clicked=""
           @vuetable:pagination-data="onPaginationData"
           @vuetable:loading="onVuetableLoading"
           @vuetable:load-success="onVuetableloadSuccess"
