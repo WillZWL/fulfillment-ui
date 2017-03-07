@@ -5,7 +5,7 @@
     <div>
       <ul class="nav nav-pills" role="tablist">
         <li role="presentation">
-          <button type="button" class="btn btn-info" @click='changeStatus(3)'>Paied</button>
+          <button type="button" class="btn btn-info" @click='changeStatus(3)'>Paid</button>
         </li>
         <li role="presentation">
           <div class="btn-group" role="group">
