@@ -179,7 +179,7 @@ export default {
       ],
       perPage: 100,
       loading: '',
-      statusText: 'Paied',
+      statusText: 'Paid',
       moreParams: {
         status: 3
       }
@@ -261,7 +261,7 @@ export default {
       if (status === 5) {
         this.statusText = 'Allocated'
       } else {
-        this.statusText = 'Paied'
+        this.statusText = 'Paid'
       }
       this.moreParams.status = status
       if (feedStatus !== '') {
