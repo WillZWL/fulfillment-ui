@@ -77,6 +77,7 @@ export default {
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
       this.params.filter = this.filterText
+      this.params.export = 0
       this.$events.fire('filter-set', this.params)
     },
     resetFilter () {
