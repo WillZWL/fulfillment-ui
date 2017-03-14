@@ -8,11 +8,14 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand">ESG Fulfillment System</a>
+        <a class="navbar-brand"><img src="./../../assets/logo.png"></a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav">
           <router-link tag="li" active-class="active" to="/" exact>
+            <a>Dashboard</a>
+          </router-link>
+          <router-link tag="li" active-class="active" to="/paid-orders">
             <a>Paid Order List</a>
           </router-link>
           <router-link tag="li" active-class="active" to="/pending-paid-orders">
@@ -26,3 +29,11 @@
     </div>
   </nav>
 </template>
+<style scoped>
+  .navbar-brand {
+    padding: 5px 25px;
+  }
+  img {
+    height: 40px;
+  }
+</style>
