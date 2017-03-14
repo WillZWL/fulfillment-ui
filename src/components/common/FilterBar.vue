@@ -8,12 +8,6 @@
           <label>Courier :</label>
           <vue-select multiple v-model="selectedCouriers" label="courier_name" :options="couriers"></vue-select>
           <br/>
-          <label>Merchant Balance:</label>&nbsp;&nbsp;&nbsp;&nbsp;( When the merchant balance is below 0, their orders can not do allocation)<br/>
-          <input type="radio" name="balanceBelow0" value="0" v-model="balanceBelow0">
-          <label>Over 0 &nbsp;&nbsp;</label>
-          <input type="radio" name="balanceBelow0" value="1" v-model="balanceBelow0">
-          <label>Below 0</label>
-          <br/><br/>
           <label> Search for :</label><br/>
           <input type="text" v-model="filterText" class="form-control" @keyup.enter="doFilter" placeholder="so no, platform_id">
           <button class="btn btn-primary" @click.prevent="doFilter"><span class="glyphicon glyphicon-search"></span> Search</button>
@@ -40,7 +34,6 @@
 let API_URL = process.env.API_URL
 let ACCESS_TOKEN = process.env.ACCESS_TOKEN
 import VueSelect from 'vue-select'
-import $ from 'jquery'
 export default {
   components: {
     VueSelect
@@ -84,7 +77,6 @@ export default {
     doFilter () {
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
-      this.params.balanceBelow0 = this.balanceBelow0
       this.params.filter = this.filterText
       this.params.export = 0
       this.$events.fire('filter-set', this.params)
@@ -94,15 +86,12 @@ export default {
       this.$events.fire('filter-reset')
     },
     exportExcel () {
-      this.params.status = this.status
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
-      this.params.balanceBelow0 = this.balanceBelow0
       this.params.filter = this.filterText
       this.params.export = 1
       this.params.access_token = ACCESS_TOKEN
-      var downloadUrl = API_URL + 'fulfillment-order?' + $.param(this.params)
-      window.open(downloadUrl)
+      this.$events.fire('download', this.params)
     },
     getMerchantList () {
       this.$events.fire('show-loding')

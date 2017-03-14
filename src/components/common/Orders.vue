@@ -1,29 +1,9 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
-    <filter-bar :status="moreParams.status"></filter-bar>
+    <filter-bar :status="status"></filter-bar>
     <settings :fields="fields"></settings>
-    <div>
-      <ul class="nav nav-pills" role="tablist">
-        <li role="presentation">
-          <button type="button" class="btn btn-info" @click='changeStatus(3)'>{{ statusText }}</button>
-        </li>
-        <li role="presentation">
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              Allocated
-              <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <li><a href="#" @click="changeStatus(5, '')">All</li>
-              <li><a href="#" @click='changeStatus(5, 2)'>Feed Generated</a></li>
-              <li><a href="#" @click='changeStatus(5, 0)'>Not Generated</a></li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
     <div class="panel panel-default">
-      <div class="panel-heading"><b>{{ statusText }}</b>  Order List</div>
+      <div class="panel-heading">Order List</div>
       <div class="panel-body">
         <vuetable ref="vuetable"
           :api-url="apiUrl+'fulfillment-order'"
@@ -39,7 +19,7 @@
           :track-by="'order_no'"
           :per-page="Number(perPage)"
           loading-class="loading"
-          @vuetable:cell-clicked=""
+          @vuetable:cell-clicked="onCellClicked"
           @vuetable:pagination-data="onPaginationData"
           @vuetable:loading="onVuetableLoading"
           @vuetable:load-success="onVuetableloadSuccess"
@@ -67,12 +47,112 @@ import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
 import Vue from 'vue'
 import sweetAlert from 'sweetalert'
-import FilterBar from './FilterBar.vue'
-import Settings from './Settings.vue'
+import $ from 'jquery'
+import FilterBar from './FilterBar'
+import Settings from './Settings'
+import DetailRow from './DetailRow'
+
+Vue.component('detail-row', DetailRow)
 
 let API_URL = process.env.API_URL
 
 export default {
+  props: {
+    fields: {
+      type: Array,
+      default: () => [
+        {
+          name: '__sequence',
+          title: '#',
+          titleClass: 'text-right',
+          dataClass: 'text-right'
+        },
+        {
+          name: 'order_no',
+          title: 'So No',
+          sortField: 'order_no'
+        },
+        {
+          name: 'marketplace_platform_id',
+          title: 'platform_id',
+          visible: false
+        },
+        {
+          name: 'sub_merchant_id',
+          title: 'Merchant'
+        },
+        {
+          name: 'order_create_date',
+          title: 'create_date',
+          titleClass: 'text-center',
+          dataClass: 'text-center',
+          visible: false
+        },
+        {
+          name: 'courier_name',
+          title: 'courier_name',
+          titleClass: 'text-center',
+          dataClass: 'text-center'
+        },
+        {
+          name: 'order_type',
+          visible: false
+        },
+        {
+          name: 'country',
+          title: 'Country',
+          titleClass: 'text-center',
+          dataClass: 'text-center'
+        },
+        {
+          name: 'currency'
+        },
+        {
+          name: 'amount',
+          titleClass: 'text-center',
+          dataClass: 'text-right'
+        },
+        {
+          name: 'hold_status',
+          callback: 'getStatus'
+        },
+        {
+          name: 'refund_status',
+          callback: 'getStatus'
+        },
+        {
+          name: 'merchant_hold_status',
+          callback: 'getStatus'
+        },
+        {
+          name: 'items',
+          titleClass: 'text-center',
+          dataClass: 'text-left',
+          callback: 'formatItems',
+          visible: false
+        }
+      ]
+    },
+    status: {
+      type: Number,
+      default: 3
+    },
+    refund_status: {
+      type: Number
+    },
+    hold_status: {
+      type: Number
+    },
+    prepay_hold_status: {
+      type: Number
+    },
+    merchant_hold_status: {
+      type: Number
+    },
+    exclude_lack_balance: {
+      type: Number
+    }
+  },
   components: {
     FilterBar,
     Vuetable,
@@ -83,77 +163,6 @@ export default {
   data () {
     return {
       apiUrl: API_URL,
-      fields: [
-        {
-          name: '__sequence',
-          title: '#',
-          titleClass: 'text-right',
-          dataClass: 'text-right'
-        },
-        // {
-        //   name: '__checkbox',
-        //   titleClass: 'text-center',
-        //   dataClass: 'text-center'
-        // },
-        {
-          name: 'order_no',
-          title: 'So No',
-          sortField: 'order_no'
-        },
-        {
-          name: 'marketplace_platform_id',
-          title: 'platform_id'
-        },
-        {
-          name: 'sub_merchant_id',
-          title: 'Merchant'
-        },
-        {
-          name: 'order_create_date',
-          title: 'create_date',
-          sortField: 'order_create_date',
-          titleClass: 'text-center',
-          dataClass: 'text-center'
-        },
-        {
-          name: 'courier_name',
-          title: 'courier_name',
-          titleClass: 'text-center',
-          dataClass: 'text-center'
-        },
-        {
-          name: 'order_type',
-          sortField: 'order_type'
-        },
-        {
-          name: 'country',
-          title: 'Country',
-          titleClass: 'text-center',
-          dataClass: 'text-center'
-        },
-        {
-          name: 'currency',
-          sortField: 'currency'
-        },
-        {
-          name: 'amount',
-          sortField: 'amount',
-          titleClass: 'text-center',
-          dataClass: 'text-right'
-        },
-        {
-          name: 'items',
-          titleClass: 'text-center',
-          dataClass: 'text-left',
-          callback: 'formatItems'
-        // },
-        // {
-        //   name: '__component:custom-actions',
-        //   title: 'Actions',
-        //   titleClass: 'text-center',
-        //   dataClass: 'text-center'
-        }
-      ],
       css: {
         table: {
           tableClass: 'table table-bordered table-striped table-hover',
@@ -177,11 +186,15 @@ export default {
       sortOrder: [
         {field: 'order_no', sortField: 'order_no', direction: 'asc'}
       ],
-      perPage: 100,
+      perPage: 10,
       loading: '',
-      statusText: 'Paid',
       moreParams: {
-        status: 3
+        status: this.status,
+        refund_status: this.refund_status,
+        hold_status: this.hold_status,
+        prepay_hold_status: this.prepay_hold_status,
+        merchant_hold_status: this.merchant_hold_status,
+        exclude_lack_balance: this.exclude_lack_balance
       }
     }
   },
@@ -236,6 +249,13 @@ export default {
       }
       return newValue
     },
+    getStatus (value) {
+      var status = 'No'
+      if (value > 0) {
+        value = 'Yes'
+      }
+      return status
+    },
     onPaginationData (paginationData) {
       this.$refs.pagination.setPaginationData(paginationData)
       this.$refs.paginationInfo.setPaginationData(paginationData)
@@ -243,9 +263,19 @@ export default {
     onChangePage (page) {
       this.$refs.vuetable.changePage(page)
     },
-    onCellClicked (newData, field, event) {
-      console.log('cellClicked: ', field.name)
-      this.$refs.vuetable.toggleDetailRow(newData.order_no)
+    onCellClicked (rowData, field, event) {
+      console.log('cellClicked: ', rowData.sub_merchant_id)
+      this.$events.fire('show-loding')
+      this.$http.get(this.apiUrl + 'merchant-balance?merchant_id=' + rowData.sub_merchant_id)
+          .then(function (response) {
+            rowData.balance = response.data.data[0].balance
+            rowData.currency_id = response.data.data[0].currency_id
+            this.$refs.vuetable.toggleDetailRow(rowData.order_no)
+            this.$events.fire('hide-loading')
+          })
+          .catch(function () {
+            this.$events.fire('load-error')
+          })
     },
     onVuetableLoading () {
       this.showLoader()
@@ -276,14 +306,24 @@ export default {
   },
   events: {
     'filter-set' (params) {
-      var status = this.moreParams.status
-      this.moreParams = params
-      this.moreParams.status = status
+      this.moreParams.merchant_id = params.merchantId
+      this.moreParams.courier_id = params.courierId
+      this.moreParams.filter = params.filter
+      this.moreParams.export = params.export
       Vue.nextTick(() => this.$refs.vuetable.refresh())
     },
     'filter-reset' () {
       this.moreParams = {}
       Vue.nextTick(() => this.$refs.vuetable.refresh())
+    },
+    'download' (params) {
+      this.moreParams.merchant_id = params.merchantId
+      this.moreParams.courier_id = params.courierId
+      this.moreParams.filter = params.filter
+      this.moreParams.export = params.export
+      this.moreParams.access_token = params.access_token
+      var downloadUrl = API_URL + 'fulfillment-order?' + $.param(this.moreParams)
+      window.open(downloadUrl)
     },
     'show-loding' () {
       this.loading = 'loading'
@@ -347,6 +387,7 @@ export default {
 
 /* Loading Animation: */
 .vuetable-wrapper {
+  margin-top: 60px;
   opacity: 1;
   position: relative;
   filter: alpha(opacity=100); /* IE8 and earlier */
