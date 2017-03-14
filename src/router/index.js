@@ -8,6 +8,8 @@ import Dashboard from 'components/Dashboard'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
+  root: 'order_fulfillment',
   routes: [
     {
       path: '/',

@@ -3,7 +3,7 @@
     <filter-bar :status="status"></filter-bar>
     <settings :fields="fields"></settings>
     <div class="panel panel-default">
-      <div class="panel-heading">Order List</div>
+      <div class="panel-heading">{{ $route.name }} </div>
       <div class="panel-body">
         <vuetable ref="vuetable"
           :api-url="apiUrl+'fulfillment-order'"

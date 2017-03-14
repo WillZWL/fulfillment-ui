@@ -10,6 +10,11 @@
 </style>
 <script>
 export default {
-  name: 'app'
+  name: 'app',
+  watch: {
+    '$route' (to, from) {
+      window.location.href = to.path
+    }
+  }
 }
 </script>
