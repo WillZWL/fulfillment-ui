@@ -7,6 +7,11 @@
           <vue-select multiple v-model="selectedMerchants" label="merchant_id" :options="merchants"></vue-select>
           <label>Courier :</label>
           <vue-select multiple v-model="selectedCouriers" label="courier_name" :options="couriers"></vue-select>
+          <div v-if="$route.path == '/allocated-orders'">
+            <label>Picklist No:</label><br/>
+            <input type="text" v-model="picklistNo" class="form-control col-md-4" placeholder="Picklist No">
+            <br/>
+          </div>
           <br/>
           <label> Search for :</label><br/>
           <input type="text" v-model="filterText" class="form-control" @keyup.enter="doFilter" placeholder="so no, platform_id">
@@ -45,6 +50,7 @@ export default {
     return {
       apiUrl: API_URL,
       filterText: '',
+      picklistNo: '',
       balanceBelow0: 0,
       selectedMerchants: [],
       selectedCouriers: [],
@@ -78,6 +84,7 @@ export default {
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
       this.params.filter = this.filterText
+      this.params.picklistNo = this.picklistNo
       this.params.export = 0
       this.$events.fire('filter-set', this.params)
     },
@@ -89,6 +96,7 @@ export default {
       this.params.merchantId = this.selectedMerchantIds
       this.params.courierId = this.selectedCourierIds
       this.params.filter = this.filterText
+      this.params.picklistNo = this.picklistNo
       this.params.export = 1
       this.params.access_token = ACCESS_TOKEN
       this.$events.fire('download', this.params)

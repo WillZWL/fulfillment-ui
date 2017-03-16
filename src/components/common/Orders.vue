@@ -309,6 +309,7 @@ export default {
       this.moreParams.merchant_id = params.merchantId
       this.moreParams.courier_id = params.courierId
       this.moreParams.filter = params.filter
+      this.moreParams.picklist_no = params.picklistNo
       this.moreParams.export = params.export
       Vue.nextTick(() => this.$refs.vuetable.refresh())
     },
@@ -320,6 +321,7 @@ export default {
       this.moreParams.merchant_id = params.merchantId
       this.moreParams.courier_id = params.courierId
       this.moreParams.filter = params.filter
+      this.moreParams.picklist_no = params.picklistNo
       this.moreParams.export = params.export
       this.moreParams.access_token = params.access_token
       var downloadUrl = API_URL + 'fulfillment-order?' + $.param(this.moreParams)
