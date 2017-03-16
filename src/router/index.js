@@ -9,7 +9,7 @@ Vue.use(Router)
 
 export default new Router({
   mode: 'history',
-  root: '/order_fulfillment',
+  base: '/order_fulfillment',
   routes: [
     {
       path: '/',
