@@ -12,16 +12,21 @@
 .alert strong {
   padding-right: 50px;
 }
+.title {
+  padding: 0 15px;
+}
 </style>
 <template>
   <div>
     <nav-bar></nav-bar>
-    <div class="dashboard">
-      <a class="btn btn-primary pull-right" href="http://admincentre.eservicesgroup.com/order/integrated_order_fulfillment/iwms_allocation_plan">Allocation Plan</a>
-      <h1>Dashboard</h1>
+    <div class="dashboard col-md-12 col-sm-12">
+      <div class="title">
+        <a class="btn btn-primary pull-right" href="http://admincentre.eservicesgroup.com/order/integrated_order_fulfillment/iwms_allocation_plan">Allocation Plan</a>
+        <h1>Dashboard</h1>
+      </div>
       <div>
         <div class="col-md-8 col-sm-12">
-          <div class="panel panel-info">
+          <div class="panel panel-primary">
             <div class="panel-heading">Orders Count</div>
             <div class="panel-body">
               <div class="alert alert-danger" role="alert">
@@ -38,70 +43,25 @@
           <div class="panel panel-primary">
             <div class="panel-heading">Merchant Orders Count</div>
             <div class="panel-body">
-              <div class="col-md-4 col-sm-12">
-                <div class="panel panel-danger">
-                  <div class="panel-heading">Pending Paid Orders</div>
-                  <div class="panel-body">
-                     <p>{{ loading }}</p>
-                    <ul class="list-group">
-                      <li class="list-group-item" v-for="merchant_pending in merchant_pending_orders_count">
-                         <span class="badge">{{ merchant_pending.count }}</span>
-                         {{ merchant_pending.merchant_id }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-12">
-                <div class="panel panel-success">
-                  <div class="panel-heading">All Paid Orders</div>
-                  <div class="panel-body">
-                    <p>{{ loading }}</p>
-                    <ul class="list-group">
-                      <li class="list-group-item" v-for="merchant_all_paid in merchant_all_paid_orders_count">
-                         <span class="badge">{{ merchant_all_paid.count }}</span>
-                         {{ merchant_all_paid.merchant_id }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-12">
-                <div class="panel panel-info">
-                  <div class="panel-heading">Allocated Orders</div>
-                  <div class="panel-body">
-                    <p>{{ loading }}</p>
-                    <ul class="list-group">
-                      <li class="list-group-item" v-for="merchant_allocated in merchant_allocated_orders_count">
-                         <span class="badge">{{ merchant_allocated.count }}</span>
-                         {{ merchant_allocated.merchant_id }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <list :heading="'Pending Paid Orders'"
+                    :itemList="merchant_pending_orders_count"
+                    :loading="loading"
+                    :panelClass="'panel-danger'">
+              </list>
+              <list :heading="'All Paid Orders'"
+                    :itemList="merchant_all_paid_orders_count"
+                    :loading="loading"
+                    :panelClass="'panel-success'">
+              </list>
+              <list :heading="'Allocated Orders'"
+                    :itemList="merchant_allocated_orders_count"
+                    :loading="loading"
+                    :panelClass="'panel-info'">
+              </list>
             </div>
           </div>
         </div>
-        <div class="col-md-4 col-sm-12">
-          <div class="panel panel-primary">
-            <div class="panel-heading">Merchant Balance</div>
-            <div class="panel-body">
-              <p>{{ loading }}</p>
-              <ul class="list-group">
-                <li class="list-group-item" v-for="merchantBalance in merchantBalanceList">
-                  <span class="badge" v-if="merchantBalance.balance > 0" v-bind:style="{ 'background-color': '#5cb85c' }">
-                  {{ merchantBalance.currency_id }} {{ merchantBalance.balance}}
-                  </span>
-                  <span class="badge" v-else="merchantBalance.balance < 0" v-bind:style="{ 'background-color': '#f0ad4e' }">
-                  {{ merchantBalance.currency_id }} {{ merchantBalance.balance}}
-                  </span>
-                  {{ merchantBalance.merchant_id }}
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <merchant-balance :loading="loading" :itemList="merchantBalanceList"></merchant-balance>
       </div>
     </div>
   </div>
@@ -110,10 +70,14 @@
   let API_URL = process.env.API_URL
   import NavBar from './common/NavBar.vue'
   import FooterBar from './common/FooterBar.vue'
+  import List from './dashboard/List.vue'
+  import MerchantBalance from './dashboard/MerchantBalance.vue'
   export default {
     components: {
       NavBar,
-      FooterBar
+      FooterBar,
+      List,
+      MerchantBalance
     },
     data () {
       return {

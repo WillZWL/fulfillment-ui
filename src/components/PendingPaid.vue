@@ -15,7 +15,7 @@
 <script>
   import NavBar from './common/NavBar.vue'
   import FooterBar from './common/FooterBar.vue'
-  import Orders from './common/Orders.vue'
+  import Orders from './order/Orders.vue'
   export default {
     components: {
       NavBar,
