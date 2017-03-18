@@ -6,7 +6,7 @@
       <div class="panel-heading">{{ $route.name }} </div>
       <div class="panel-body">
         <vuetable ref="vuetable"
-          :api-url="apiUrl+'fulfillment-order'"
+          :api-url="this.apiUrl+'fulfillment-order'"
           :fields="fields"
           data-path="newData"
           pagination-path="pagination"
@@ -264,7 +264,6 @@ export default {
       this.$refs.vuetable.changePage(page)
     },
     onCellClicked (rowData, field, event) {
-      console.log('cellClicked: ', rowData.sub_merchant_id)
       this.$events.fire('show-loding')
       this.$http.get(this.apiUrl + 'merchant-balance?merchant_id=' + rowData.sub_merchant_id)
           .then(function (response) {
@@ -286,22 +285,6 @@ export default {
     onLoadError () {
       sweetAlert('Oops', 'Error communicating with the server', 'error')
       this.hideLoader()
-    },
-    changeStatus (status = 3, feedStatus = '') {
-      if (status === 5) {
-        this.statusText = 'Allocated'
-      } else {
-        this.statusText = 'Paid'
-      }
-      this.moreParams.status = status
-      if (feedStatus !== '') {
-        this.moreParams.dnote_invoice_status = feedStatus
-      } else {
-        delete this.moreParams.dnote_invoice_status
-      }
-      this.$nextTick(function () {
-        this.$refs.vuetable.refresh()
-      })
     }
   },
   events: {

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-md-4 col-sm-12">
+  <div class="col-md-12 col-sm-12">
     <div class="panel" :class="panelClass">
       <div class="panel-heading">{{ heading }}</div>
       <div class="panel-body">

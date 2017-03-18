@@ -1,29 +1,51 @@
 <template>
-  <div class="col-md-4 col-sm-12">
-    <div class="panel panel-primary">
-      <div class="panel-heading">Merchant Balance</div>
-      <div class="panel-body">
-        <p>{{ loading }}</p>
-        <ul class="list-group">
-          <li class="list-group-item" v-for="item in itemList">
-            <span class="badge" v-if="item.balance > 0" v-bind:style="{ 'background-color': '#5cb85c' }">
-            {{ item.currency_id }} {{ item.balance}}
-            </span>
-            <span class="badge" v-else v-bind:style="{ 'background-color': '#f0ad4e' }">
-            {{ item.currency_id }} {{ item.balance}}
-            </span>
-            {{ item.merchant_id }}
-          </li>
-        </ul>
-      </div>
+  <div class="panel panel-primary collapse-panel">
+    <div class="panel-heading">Merchants Balance
+      <chevron :glyphicon_class="'glyphicon-chevron-up'"></chevron>
+    </div>
+    <div class="panel-body collapse-body" style="display:none;">
+      <p>{{ loading }}</p>
+      <ul class="list-group">
+        <li class="list-group-item" v-for="item in itemList">
+          <span class="badge" v-if="item.balance > 0" v-bind:style="{ 'background-color': '#5cb85c' }">
+          {{ item.currency_id }} {{ item.balance}}
+          </span>
+          <span class="badge" v-else v-bind:style="{ 'background-color': '#f0ad4e' }">
+          {{ item.currency_id }} {{ item.balance}}
+          </span>
+          {{ item.merchant_id }}
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 <script>
+  let API_URL = process.env.API_URL
+  import Chevron from '../common/Chevron.vue'
   export default {
-    props: [
-      'loading',
-      'itemList'
-    ]
+    components: {
+      Chevron
+    },
+    data () {
+      return {
+        loading: 'Loading, Please wait a moment',
+        itemList: []
+      }
+    },
+    created () {
+      this.getMerchantBalanceList()
+    },
+    methods: {
+      getMerchantBalanceList () {
+        this.$http.get(API_URL + 'merchant-balance')
+          .then(function (response) {
+            this.itemList = response.data.data
+            this.loading = ''
+          })
+          .catch(function () {
+            this.loading = 'Load Error, You can refresh later'
+          })
+      }
+    }
   }
 </script>

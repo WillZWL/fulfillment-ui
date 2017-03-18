@@ -26,42 +26,52 @@
       </div>
       <div>
         <div class="col-md-8 col-sm-12">
-          <div class="panel panel-primary">
-            <div class="panel-heading">Orders Count</div>
-            <div class="panel-body">
-              <div class="alert alert-danger" role="alert">
-                <strong>Pending Paid Orders {{ pending_paid_orders_count }} </strong> Those orders need to do allocation
-              </div>
-              <div class="alert alert-success" role="alert">
-                <strong>All Paid Orders {{ all_paid_orders_count }} </strong> Those orders has been paid
-              </div>
-              <div class="alert alert-info" role="alert">
-                <strong>Allocated Orders {{ allocated_orders_count }} </strong> Those orders has been allocated.
-              </div>
+          <div class="panel panel-primary collapse-panel">
+            <div class="panel-heading">Orders Count
+              <chevron :glyphicon_class="'glyphicon-chevron-down'"></chevron>
+              <span class="pull-right">Click the child title, you can get orders list detail</span>
             </div>
-          </div>
-          <div class="panel panel-primary">
-            <div class="panel-heading">Merchant Orders Count</div>
-            <div class="panel-body">
-              <list :heading="'Pending Paid Orders'"
-                    :itemList="merchant_pending_orders_count"
-                    :loading="loading"
-                    :panelClass="'panel-danger'">
-              </list>
-              <list :heading="'All Paid Orders'"
-                    :itemList="merchant_all_paid_orders_count"
-                    :loading="loading"
-                    :panelClass="'panel-success'">
-              </list>
-              <list :heading="'Allocated Orders'"
-                    :itemList="merchant_allocated_orders_count"
-                    :loading="loading"
-                    :panelClass="'panel-info'">
-              </list>
+            <div class="panel-body collapse-body">
+              <div class="panel-group" id="accordion" role="tablist">
+                <p>{{ loading }}</p>
+                <!-- Pending Paid Orders -->
+                <orders :panelClass="'panel-danger'"
+                        :panelId="'headingOne'"
+                        :collapseId="'collapseOne'"
+                        :heading="'Pending Paid Orders'"
+                        :heading_desc="'Those orders need to do allocation'"
+                        :orders_count="pending_paid_orders_count"
+                        :itemList="merchant_pending_orders_count"
+                        :loading="loading">
+                </orders>
+                <!-- All Paid Orders -->
+                <orders :panelClass="'panel-success'"
+                        :panelId="'headingTwo'"
+                        :collapseId="'collapseTwo'"
+                        :heading="'All Paid Orders'"
+                        :heading_desc="'Those orders has been paid'"
+                        :orders_count="all_paid_orders_count"
+                        :itemList="merchant_all_paid_orders_count"
+                        :loading="loading">
+                </orders>
+                <!-- Allocated Orders -->
+                <orders :panelClass="'panel-info'"
+                        :panelId="'headingThree'"
+                        :collapseId="'collapseThree'"
+                        :heading="'Allocated Orders'"
+                        :heading_desc="'Those orders has been allocated.'"
+                        :orders_count="allocated_orders_count"
+                        :itemList="merchant_allocated_orders_count"
+                        :loading="loading">
+                </orders>
+              </div>
             </div>
           </div>
         </div>
-        <merchant-balance :loading="loading" :itemList="merchantBalanceList"></merchant-balance>
+        <div class="col-md-4 col-sm-12">
+          <picklist></picklist>
+          <merchant-balance></merchant-balance>
+        </div>
       </div>
     </div>
   </div>
@@ -70,14 +80,18 @@
   let API_URL = process.env.API_URL
   import NavBar from './common/NavBar.vue'
   import FooterBar from './common/FooterBar.vue'
-  import List from './dashboard/List.vue'
+  import Chevron from './common/Chevron.vue'
+  import Orders from './dashboard/Orders.vue'
   import MerchantBalance from './dashboard/MerchantBalance.vue'
+  import Picklist from './dashboard/Picklist.vue'
   export default {
     components: {
       NavBar,
       FooterBar,
-      List,
-      MerchantBalance
+      Chevron,
+      Orders,
+      MerchantBalance,
+      Picklist
     },
     data () {
       return {
@@ -87,25 +101,13 @@
         allocated_orders_count: '',
         merchant_pending_orders_count: [],
         merchant_all_paid_orders_count: [],
-        merchant_allocated_orders_count: [],
-        merchantBalanceList: []
+        merchant_allocated_orders_count: []
       }
     },
     created () {
-      this.getMerchantBalanceList()
       this.getDashBoardData()
     },
     methods: {
-      getMerchantBalanceList () {
-        this.$http.get(API_URL + 'merchant-balance')
-          .then(function (response) {
-            this.merchantBalanceList = response.data.data
-            this.loading = ''
-          })
-          .catch(function () {
-            this.loading = 'Load Error, You can refresh later'
-          })
-      },
       getDashBoardData () {
         this.$http.get(API_URL + 'fulfillment-order-dashboard')
           .then(function (response) {
