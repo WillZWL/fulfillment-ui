@@ -1,9 +1,8 @@
 <template>
   <div class="col-md-12 col-sm-12">
     <div class="panel" :class="panelClass">
-      <div class="panel-heading">{{ heading }}</div>
+      <div class="panel-heading">{{ heading }} Group By Merchant</div>
       <div class="panel-body">
-        <p>{{ loading }}</p>
         <ul class="list-group">
           <li class="list-group-item" v-for="item in itemList">
              <span class="badge">{{ item.count }}</span>
@@ -19,8 +18,7 @@
     props: [
       'panelClass',
       'heading',
-      'itemList',
-      'loading'
+      'itemList'
     ]
   }
 </script>
