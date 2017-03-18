@@ -4,7 +4,8 @@
       <chevron :glyphicon_class="'glyphicon-chevron-up'"></chevron>
     </div>
     <div class="panel-body collapse-body" style="display:none;">
-      <p>{{ loading }}</p>
+      <loading :status="loading_status"></loading>
+      <error :status="error_status"></error>
       <ul class="list-group">
         <li class="list-group-item" v-for="item in itemList">
           <span class="badge" v-if="item.balance > 0" v-bind:style="{ 'background-color': '#5cb85c' }">
@@ -22,13 +23,18 @@
 <script>
   let API_URL = process.env.API_URL
   import Chevron from '../common/Chevron.vue'
+  import Error from '../common/Error.vue'
+  import Loading from '../common/Loading.vue'
   export default {
     components: {
-      Chevron
+      Chevron,
+      Error,
+      Loading
     },
     data () {
       return {
-        loading: 'Loading, Please wait a moment',
+        loading_status: true,
+        error_status: false,
         itemList: []
       }
     },
@@ -40,10 +46,11 @@
         this.$http.get(API_URL + 'merchant-balance')
           .then(function (response) {
             this.itemList = response.data.data
-            this.loading = ''
+            this.loading_status = false
           })
           .catch(function () {
-            this.loading = 'Load Error, You can refresh later'
+            this.loading_status = false
+            this.error_status = true
           })
       }
     }

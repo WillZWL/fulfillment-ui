@@ -33,16 +33,15 @@
             </div>
             <div class="panel-body collapse-body">
               <div class="panel-group" id="accordion" role="tablist">
-                <p>{{ loading }}</p>
-                <!-- Pending Paid Orders -->
+                <loading :status="loading_status"></loading>
+                <error :status="error_status"></error>
                 <orders :panelClass="'panel-danger'"
                         :panelId="'headingOne'"
                         :collapseId="'collapseOne'"
                         :heading="'Pending Paid Orders'"
                         :heading_desc="'Those orders need to do allocation'"
                         :orders_count="pending_paid_orders_count"
-                        :itemList="merchant_pending_orders_count"
-                        :loading="loading">
+                        :itemList="merchant_pending_orders_count">
                 </orders>
                 <!-- All Paid Orders -->
                 <orders :panelClass="'panel-success'"
@@ -51,8 +50,7 @@
                         :heading="'All Paid Orders'"
                         :heading_desc="'Those orders has been paid'"
                         :orders_count="all_paid_orders_count"
-                        :itemList="merchant_all_paid_orders_count"
-                        :loading="loading">
+                        :itemList="merchant_all_paid_orders_count">
                 </orders>
                 <!-- Allocated Orders -->
                 <orders :panelClass="'panel-info'"
@@ -61,8 +59,7 @@
                         :heading="'Allocated Orders'"
                         :heading_desc="'Those orders has been allocated.'"
                         :orders_count="allocated_orders_count"
-                        :itemList="merchant_allocated_orders_count"
-                        :loading="loading">
+                        :itemList="merchant_allocated_orders_count">
                 </orders>
               </div>
             </div>
@@ -81,6 +78,8 @@
   import NavBar from './common/NavBar.vue'
   import FooterBar from './common/FooterBar.vue'
   import Chevron from './common/Chevron.vue'
+  import Error from './common/Error.vue'
+  import Loading from './common/Loading.vue'
   import Orders from './dashboard/Orders.vue'
   import MerchantBalance from './dashboard/MerchantBalance.vue'
   import Picklist from './dashboard/Picklist.vue'
@@ -89,13 +88,16 @@
       NavBar,
       FooterBar,
       Chevron,
+      Error,
+      Loading,
       Orders,
       MerchantBalance,
       Picklist
     },
     data () {
       return {
-        loading: 'Loading, Please wait a moment',
+        loading_status: true,
+        error_status: false,
         all_paid_orders_count: '',
         pending_paid_orders_count: '',
         allocated_orders_count: '',
@@ -117,10 +119,11 @@
             this.merchant_pending_orders_count = response.data.merchant_pending_orders_count
             this.merchant_all_paid_orders_count = response.data.merchant_all_paid_orders_count
             this.merchant_allocated_orders_count = response.data.merchant_allocated_orders_count
-            this.loading = ''
+            this.loading_status = false
           })
           .catch(function () {
-            this.loading = 'Load Error, You can refresh later'
+            this.loading_status = false
+            this.error_status = true
           })
       }
     }

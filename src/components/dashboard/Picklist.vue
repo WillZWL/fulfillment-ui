@@ -12,7 +12,8 @@
       <chevron :glyphicon_class="'glyphicon-chevron-up'"></chevron>
     </div>
     <div class="panel-body collapse-body" style="display:none;">
-      <p>{{ loading }}</p>
+      <loading :status="loading_status"></loading>
+      <error :status="error_status"></error>
       <ul class="list-group">
         <li class="list-group-item" v-for="item in itemList">
           <span class="pick_list_no">{{ item.pick_list_no }}</span>
@@ -28,15 +29,20 @@
 <script>
   let API_URL = process.env.API_URL
   import Chevron from '../common/Chevron.vue'
+  import Error from '../common/Error.vue'
+  import Loading from '../common/Loading.vue'
   import SoNoList from './SoNoList.vue'
   export default {
     components: {
       Chevron,
-      SoNoList
+      SoNoList,
+      Error,
+      Loading
     },
     data () {
       return {
-        loading: 'Loading, Please wait a moment',
+        loading_status: true,
+        error_status: false,
         itemList: []
       }
     },
@@ -48,10 +54,11 @@
         this.$http.get(API_URL + 'fulfillment-order-picklist-count')
           .then(function (response) {
             this.itemList = response.data
-            this.loading = ''
+            this.loading_status = false
           })
           .catch(function () {
-            this.loading = 'Load Error, You can refresh later'
+            this.loading_status = false
+            this.error_status = true
           })
       }
     }
