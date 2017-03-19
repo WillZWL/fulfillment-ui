@@ -31,8 +31,7 @@
       'heading',
       'heading_desc',
       'orders_count',
-      'itemList',
-      'loading'
+      'itemList'
     ]
   }
 </script>

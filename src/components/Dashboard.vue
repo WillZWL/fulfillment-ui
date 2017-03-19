@@ -12,24 +12,38 @@
 .alert strong {
   padding-right: 50px;
 }
-.title {
-  padding: 0 15px;
+.row {
+  margin-bottom: 20px;
 }
 </style>
 <template>
-  <div>
+  <div class="content">
     <nav-bar></nav-bar>
-    <div class="dashboard col-md-12 col-sm-12">
-      <div class="title">
-        <a class="btn btn-primary pull-right" href="http://admincentre.eservicesgroup.com/order/integrated_order_fulfillment/iwms_allocation_plan">Allocation Plan</a>
-        <h1>Dashboard</h1>
+    <div class="dashboard">
+      <div class="row">
+        <div class="col-md-8 col-sm-12">
+          <h1>Dashboard</h1>
+        </div>
+        <div class="col-md-4 col-sm-12">
+        </div>
       </div>
-      <div>
+      <div class="row">
+        <div class="col-md-8 col-sm-12">
+          <quick-search></quick-search>
+        </div>
+        <div class="col-md-4 col-sm-12">
+          <a class="btn btn-primary" href="http://admincentre.eservicesgroup.com/order/integrated_order_fulfillment/iwms_allocation_plan">Allocation Plan</a>
+        </div>
+      </div>
+      <div class="row">
         <div class="col-md-8 col-sm-12">
           <div class="panel panel-primary collapse-panel">
             <div class="panel-heading">Orders Count
               <chevron :glyphicon_class="'glyphicon-chevron-down'"></chevron>
-              <span class="pull-right">Click the child title, you can get orders list detail</span>
+              <span class="pull-right">
+              <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span>
+              Click the child title, you can get orders list detail
+              </span>
             </div>
             <div class="panel-body collapse-body">
               <div class="panel-group" id="accordion" role="tablist">
@@ -80,6 +94,7 @@
   import Chevron from './common/Chevron.vue'
   import Error from './common/Error.vue'
   import Loading from './common/Loading.vue'
+  import QuickSearch from './dashboard/QuickSearch.vue'
   import Orders from './dashboard/Orders.vue'
   import MerchantBalance from './dashboard/MerchantBalance.vue'
   import Picklist from './dashboard/Picklist.vue'
@@ -90,6 +105,7 @@
       Chevron,
       Error,
       Loading,
+      QuickSearch,
       Orders,
       MerchantBalance,
       Picklist
