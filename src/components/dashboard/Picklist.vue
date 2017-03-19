@@ -17,10 +17,7 @@
       <ul class="list-group">
         <li class="list-group-item" v-for="item in itemList">
           <span class="pick_list_no">{{ item.pick_list_no }}</span>
-          <button class="btn btn-default pull-right" data-toggle="modal" :data-target="'#picklistDetail'+item.pick_list_no">
-            <span class="badge">{{ item.count }}</span>
-          </button>
-          <so-no-list :pick_list_no="item.pick_list_no" :so_no_list="item.so_no_list"></so-no-list>
+          <span class="badge">{{ item.count }}</span>
         </li>
       </ul>
     </div>
@@ -31,11 +28,9 @@
   import Chevron from '../common/Chevron.vue'
   import Error from '../common/Error.vue'
   import Loading from '../common/Loading.vue'
-  import SoNoList from './SoNoList.vue'
   export default {
     components: {
       Chevron,
-      SoNoList,
       Error,
       Loading
     },

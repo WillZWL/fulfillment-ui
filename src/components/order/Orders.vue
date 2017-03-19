@@ -265,7 +265,7 @@ export default {
     },
     onCellClicked (rowData, field, event) {
       this.$events.fire('show-loding')
-      this.$http.get(this.apiUrl + 'merchant-balance?merchant_id=' + rowData.sub_merchant_id)
+      this.$http.get(API_URL + 'merchant-balance?merchant_id=' + rowData.sub_merchant_id)
           .then(function (response) {
             rowData.balance = response.data.data[0].balance
             rowData.currency_id = response.data.data[0].currency_id
@@ -292,7 +292,7 @@ export default {
       this.moreParams.merchant_id = params.merchantId
       this.moreParams.courier_id = params.courierId
       this.moreParams.filter = params.filter
-      this.moreParams.picklist_no = params.picklistNo
+      this.moreParams.pick_list_no = params.picklistNo
       this.moreParams.export = params.export
       Vue.nextTick(() => this.$refs.vuetable.refresh())
     },
@@ -304,7 +304,7 @@ export default {
       this.moreParams.merchant_id = params.merchantId
       this.moreParams.courier_id = params.courierId
       this.moreParams.filter = params.filter
-      this.moreParams.picklist_no = params.picklistNo
+      this.moreParams.pick_list_no = params.picklistNo
       this.moreParams.export = params.export
       this.moreParams.access_token = params.access_token
       var downloadUrl = API_URL + 'fulfillment-order?' + $.param(this.moreParams)

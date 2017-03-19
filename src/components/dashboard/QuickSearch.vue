@@ -1,5 +1,6 @@
 <template>
-  <div class="input-group col-md-6 col-sm-12">
+<div class="col-md-6 col-sm-12">
+  <div class="input-group">
     <input type="text" name="so_no" required="required" class="form-control" :placeholder="placeholder" v-model="so_no" @keyup.enter="quickSearch">
     <div class="input-group-btn">
       <button type="button" class="btn btn-primary" @click="quickSearch" data-toggle="modal" data-target="#settingsModal">
@@ -22,6 +23,7 @@
       :merchant_balance="merchant_balance">
     </order-view>
   </div>
+</div>
 </template>
 <script>
   let API_URL = process.env.API_URL

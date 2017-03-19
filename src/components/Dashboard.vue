@@ -30,6 +30,7 @@
       <div class="row">
         <div class="col-md-8 col-sm-12">
           <quick-search></quick-search>
+          <picklist-search></picklist-search>
         </div>
         <div class="col-md-4 col-sm-12">
           <a class="btn btn-primary" href="http://admincentre.eservicesgroup.com/order/integrated_order_fulfillment/iwms_allocation_plan">Allocation Plan</a>
@@ -95,6 +96,7 @@
   import Error from './common/Error.vue'
   import Loading from './common/Loading.vue'
   import QuickSearch from './dashboard/QuickSearch.vue'
+  import PicklistSearch from './dashboard/PicklistSearch.vue'
   import Orders from './dashboard/Orders.vue'
   import MerchantBalance from './dashboard/MerchantBalance.vue'
   import Picklist from './dashboard/Picklist.vue'
@@ -106,6 +108,7 @@
       Error,
       Loading,
       QuickSearch,
+      PicklistSearch,
       Orders,
       MerchantBalance,
       Picklist
