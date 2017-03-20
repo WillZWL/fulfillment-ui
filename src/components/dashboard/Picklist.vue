@@ -47,14 +47,14 @@
     methods: {
       getPickListCount () {
         this.$http.get(API_URL + 'fulfillment-order-picklist-count')
-          .then(function (response) {
-            this.itemList = response.data
-            this.loading_status = false
-          })
-          .catch(function () {
-            this.loading_status = false
-            this.error_status = true
-          })
+        .then(function (response) {
+          this.itemList = response.data
+          this.loading_status = false
+        })
+        .catch(function () {
+          this.loading_status = false
+          this.error_status = true
+        })
       }
     }
   }

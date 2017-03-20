@@ -1,9 +1,9 @@
 <template>
   <div class="vuetable-wrapper" :class="loading">
-    <filter-bar :status="status"></filter-bar>
+    <filter-bar></filter-bar>
     <settings :fields="fields"></settings>
     <div class="panel panel-default">
-      <div class="panel-heading">{{ $route.name }} </div>
+      <div class="panel-heading">{{ $route.name }}</div>
       <div class="panel-body">
         <vuetable ref="vuetable"
           :api-url="this.apiUrl+'fulfillment-order'"
@@ -37,11 +37,11 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
+let API_URL = process.env.API_URL
 import Vuetable from 'vuetable-2/src/components/Vuetable'
 import VuetablePagination from 'vuetable-2/src/components/VuetablePagination'
 import VuetablePaginationInfo from 'vuetable-2/src/components/VuetablePaginationInfo'
@@ -53,8 +53,6 @@ import Settings from './Settings'
 import DetailRow from './DetailRow'
 
 Vue.component('detail-row', DetailRow)
-
-let API_URL = process.env.API_URL
 
 export default {
   props: {
@@ -266,15 +264,15 @@ export default {
     onCellClicked (rowData, field, event) {
       this.$events.fire('show-loding')
       this.$http.get(API_URL + 'merchant-balance?merchant_id=' + rowData.sub_merchant_id)
-          .then(function (response) {
-            rowData.balance = response.data.data[0].balance
-            rowData.currency_id = response.data.data[0].currency_id
-            this.$refs.vuetable.toggleDetailRow(rowData.order_no)
-            this.$events.fire('hide-loading')
-          })
-          .catch(function () {
-            this.$events.fire('load-error')
-          })
+      .then(function (response) {
+        rowData.balance = response.data.data[0].balance
+        rowData.currency_id = response.data.data[0].currency_id
+        this.$refs.vuetable.toggleDetailRow(rowData.order_no)
+        this.$events.fire('hide-loading')
+      })
+      .catch(function () {
+        this.$events.fire('load-error')
+      })
     },
     onVuetableLoading () {
       this.showLoader()

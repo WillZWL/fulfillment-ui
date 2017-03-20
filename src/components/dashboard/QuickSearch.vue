@@ -1,9 +1,9 @@
 <template>
 <div class="col-md-6 col-sm-12">
   <div class="input-group">
-    <input type="text" name="so_no" required="required" class="form-control" :placeholder="placeholder" v-model="so_no" @keyup.enter="quickSearch">
+    <input type="text" name="so_no" required="required" class="form-control" :placeholder="placeholder" v-model="so_no">
     <div class="input-group-btn">
-      <button type="button" class="btn btn-primary" @click="quickSearch" data-toggle="modal" data-target="#settingsModal">
+      <button type="button" class="btn btn-primary" @click="quickSearch" data-toggle="modal" data-target="#orderView">
         <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
         Quick Search!
       </button>
@@ -57,16 +57,16 @@
             this.merchant_id = response.data.data[0].sub_merchant_id
           }).then(function () {
             this.$http.get(API_URL + 'merchant-balance?merchant_id=' + this.merchant_id)
-              .then(function (response) {
-                this.merchant_balance.balance = response.data.data[0].balance
-                this.merchant_balance.currency_id = response.data.data[0].currency_id
-                this.loading_status = false
-                this.error_status = false
-              }).catch(function () {
-                this.loading_status = false
-                this.error_msg = 'Get Merchant Balance Failed'
-                this.error_status = true
-              })
+            .then(function (response) {
+              this.merchant_balance.balance = response.data.data[0].balance
+              this.merchant_balance.currency_id = response.data.data[0].currency_id
+              this.loading_status = false
+              this.error_status = false
+            }).catch(function () {
+              this.loading_status = false
+              this.error_msg = 'Get Merchant Balance Failed'
+              this.error_status = true
+            })
           }).catch(function () {
             this.loading_status = false
             this.error_msg = 'Get Order Detail Failed'

@@ -37,7 +37,6 @@
           this.loading_status = true
           this.$http.get(API_URL + 'fulfillment-order-picklist-count?pick_list_no=' + this.pick_list_no)
           .then(function (response) {
-            console.log(response.data[0])
             this.count = response.data[0].count
             this.so_no_list = response.data[0].so_no_list
             this.loading_status = false

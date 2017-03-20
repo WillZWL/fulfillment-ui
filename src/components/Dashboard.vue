@@ -86,6 +86,7 @@
         </div>
       </div>
     </div>
+    <footer-bar></footer-bar>
   </div>
 </template>
 <script>
@@ -131,19 +132,19 @@
     methods: {
       getDashBoardData () {
         this.$http.get(API_URL + 'fulfillment-order-dashboard')
-          .then(function (response) {
-            this.all_paid_orders_count = response.data.all_paid_orders_count
-            this.pending_paid_orders_count = response.data.pending_paid_orders_count
-            this.allocated_orders_count = response.data.allocated_orders_count
-            this.merchant_pending_orders_count = response.data.merchant_pending_orders_count
-            this.merchant_all_paid_orders_count = response.data.merchant_all_paid_orders_count
-            this.merchant_allocated_orders_count = response.data.merchant_allocated_orders_count
-            this.loading_status = false
-          })
-          .catch(function () {
-            this.loading_status = false
-            this.error_status = true
-          })
+        .then(function (response) {
+          this.all_paid_orders_count = response.data.all_paid_orders_count
+          this.pending_paid_orders_count = response.data.pending_paid_orders_count
+          this.allocated_orders_count = response.data.allocated_orders_count
+          this.merchant_pending_orders_count = response.data.merchant_pending_orders_count
+          this.merchant_all_paid_orders_count = response.data.merchant_all_paid_orders_count
+          this.merchant_allocated_orders_count = response.data.merchant_allocated_orders_count
+          this.loading_status = false
+        })
+        .catch(function () {
+          this.loading_status = false
+          this.error_status = true
+        })
       }
     }
   }

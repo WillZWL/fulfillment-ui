@@ -43,9 +43,6 @@ export default {
   components: {
     VueSelect
   },
-  props: [
-    'status'
-  ],
   data () {
     return {
       apiUrl: API_URL,
@@ -104,24 +101,24 @@ export default {
     getMerchantList () {
       this.$events.fire('show-loding')
       this.$http.get(this.apiUrl + 'merchant')
-        .then(function (response) {
-          this.merchants = response.data.data
-          this.$events.fire('hide-loading')
-        })
-        .catch(function () {
-          this.$events.fire('load-error')
-        })
+      .then(function (response) {
+        this.merchants = response.data.data
+        this.$events.fire('hide-loading')
+      })
+      .catch(function () {
+        this.$events.fire('load-error')
+      })
     },
     getCouriersList () {
       this.$events.fire('show-loding')
       this.$http.get(this.apiUrl + 'couriers')
-        .then(function (response) {
-          this.couriers = response.data.data
-          this.$events.fire('hide-loading')
-        })
-        .catch(function () {
-          this.$events.fire('load-error')
-        })
+      .then(function (response) {
+        this.couriers = response.data.data
+        this.$events.fire('hide-loading')
+      })
+      .catch(function () {
+        this.$events.fire('load-error')
+      })
     }
   }
 }

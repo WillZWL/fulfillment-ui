@@ -44,9 +44,12 @@
 </template>
 <script>
   export default {
-    props: [
-      'fields'
-    ],
+    props: {
+      fields: {
+        type: Object,
+        default: () => {}
+      }
+    },
     data () {
       return {
         page: 100

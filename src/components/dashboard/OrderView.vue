@@ -1,5 +1,5 @@
 <template>
-  <div class="modal fade" id="settingsModal" role="dialog">
+  <div class="modal fade" id="orderView" role="dialog">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
