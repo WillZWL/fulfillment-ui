@@ -1,7 +1,7 @@
 <template>
   <div class="panel panel-primary collapse-panel">
     <div class="panel-heading">Merchants Balance
-      <chevron :glyphicon_class="'glyphicon-chevron-up'"></chevron>
+      <chevron :download_url="download_url"></chevron>
     </div>
     <div class="panel-body collapse-body" style="display:none;">
       <loading :status="loading_status"></loading>
@@ -35,7 +35,8 @@
       return {
         loading_status: true,
         error_status: false,
-        itemList: []
+        itemList: [],
+        download_url: API_URL + 'merchant-balance?download=1'
       }
     },
     created () {

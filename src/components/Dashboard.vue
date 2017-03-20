@@ -40,10 +40,10 @@
         <div class="col-md-8 col-sm-12">
           <div class="panel panel-primary collapse-panel">
             <div class="panel-heading">Orders Count
-              <chevron :glyphicon_class="'glyphicon-chevron-down'"></chevron>
+              <chevron :glyphicon_class="'glyphicon-chevron-down'" :download_url="download_url"></chevron>
               <span class="pull-right">
               <span class="glyphicon glyphicon-hand-down" aria-hidden="true"></span>
-              Click the child title, you can get orders list detail
+              Click the child title, you can get orders list detail&nbsp;&nbsp;
               </span>
             </div>
             <div class="panel-body collapse-body">
@@ -123,7 +123,8 @@
         allocated_orders_count: '',
         merchant_pending_orders_count: [],
         merchant_all_paid_orders_count: [],
-        merchant_allocated_orders_count: []
+        merchant_allocated_orders_count: [],
+        download_url: API_URL + 'fulfillment-order-dashboard?download=1'
       }
     },
     created () {

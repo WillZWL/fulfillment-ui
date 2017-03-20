@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Hello from 'components/Hello'
 import Paid from 'components/Paid'
 import PendingPaid from 'components/PendingPaid'
 import Allocated from 'components/Allocated'
@@ -30,11 +29,6 @@ export default new Router({
       path: '/allocated-orders',
       name: 'Allocated Order List',
       component: Allocated
-    // },
-    // {
-    //   path: '/',
-    //   name: 'ESG Order Fulfillment',
-    //   component: Hello
     }
   ]
 })
