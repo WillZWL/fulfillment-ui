@@ -6,7 +6,7 @@
 
 ``` bash
 # clone code && cd dir
-git clone http://gitlab.eservicesgroup.com/Will/fulfillment-ui.git
+git clone http://gitlab.eservicesgroup.com/esg-systems/fulfillment-ui.git
 cd fulfillment-ui
 ```
 
@@ -15,7 +15,7 @@ cd fulfillment-ui
 npm install
 OR yarn install
 ```
-If you use yarn, make sure that you have install it
+If you use yarn, make sure that you have installed it
 
 # config API_URL && ACCESS_TOKEN
 ```
@@ -73,4 +73,4 @@ copy the entry file `dist/index.html` to `shop.eservicesgroup.com/app/views/orde
 cp dist/index.html ../project/shop.eservicesgroup.com/app/views/order_fulfillment.php
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader) and [docs for vuetable-2](https://github.com/ratiw/vuetable-2).
